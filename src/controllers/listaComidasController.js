@@ -1,4 +1,4 @@
-const User = require('../models/userModel');
+const RegistroDiario = require('../models/RegistroDiario');
 const jwt = require('jsonwebtoken');
 const { config } = require('dotenv');
 config();
@@ -12,20 +12,22 @@ const listarComidas = async (req, res) => {
     const decodificasToken = jwt.verify(token, JWT_SECRET);
     const userId = decodificasToken.id;
 
-    // Buscar usuario
-    const usuario = await User.findById(userId);
+    // Fecha de hoy en formato YYYY-MM-DD
+    const fechaHoy = new Date().toISOString().split('T')[0];
 
-    if (!usuario) {
-      return res.status(401).json({ message: "El usuario no existe" });
+    // Buscar registro diario del usuario en esa fecha
+    const registro = await RegistroDiario.findOne({ userId, fecha: fechaHoy });
+
+    if (!registro) {
+      return res.status(200).json({
+        message: "Comidas encontradas",
+        comidas: []
+      });
     }
-
-    // Aquí asumimos que guardas las comidas en usuario.comidas o en registros diarios
-    // Si usas un modelo separado para el diario, ajusta la consulta
-    const comidas = usuario.comidas || [];
 
     res.status(200).json({
       message: "Comidas encontradas",
-      comidas
+      comidas: registro.comidas
     });
 
   } catch (error) {
