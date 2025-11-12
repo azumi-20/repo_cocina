@@ -20,11 +20,9 @@ app.use('/auth/receta', routerRece);
 app.use('/auth/diario', registroRoutes);
 
 // conectar a la base de datos usando tu config centralizado
-mongoose.connect(appConfig.mongoUri, {
-  user: appConfig.mongoUser,
-  pass: appConfig.mongoPass,
-  dbName: appConfig.mongoDbName,
-});
+mongoose.connect(appConfig.mongoUri)
+  .then(() => console.log('Conectado a MongoDB Atlas'))
+  .catch(err => console.error('Error de conexión:', err));
 
 const db = mongoose.connection;
 
