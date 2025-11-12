@@ -5,6 +5,7 @@ const {agregarFavorito} = require('../controllers/favoritoController')
 const {eliminarFavo} = require('../controllers/eliminarFavoritoController')
 const {getEstadisticas} = require('../controllers/estadisticaController')
 const {getFavoritos} = require('../controllers/mostrarFavoritoController')
+const {listarComidas} = require('../controllers/listaComidasController')
 // Ruta para agregar comida
 router.post('/agregar', agregarComida);
 
@@ -13,6 +14,7 @@ router.post('/dia', obtenerDiaActual);
 
 // Ruta para reiniciar el día
 router.post('/reiniciar', reiniciarDia);
+router.post('/comidas', listarComidas)
 
 router.post('/favoritos/agregar', agregarFavorito);
 router.post('/favoritos/eliminar', eliminarFavo);
