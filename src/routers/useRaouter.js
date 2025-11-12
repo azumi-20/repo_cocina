@@ -4,6 +4,7 @@ const { updateGeneral } = require('../controllers/datosGeneController')
 const { updateNivel } = require('../controllers/nivelactiController')
 const { updateSexo } = require('../controllers/generoController')
 const { updateCaloria } = require('../controllers/caloriasController')
+const {getPerfil, updatePerfil } = require('../controllers/perfilController')
 
 //contraseña
 const {recuperarContra} = require('../controllers/olvidarController')
@@ -19,5 +20,10 @@ routerUse.post('/genero', updateSexo)
 routerUse.post('/caloria', updateCaloria)
 routerUse.post('/olvidar', recuperarContra)
 routerUse.post('/establecer', nuevaContra)
+// Ruta para obtener perfil
+routerUse.post('/perfil', getPerfil)
+
+// Ruta para actualizar perfil
+routerUse.post('/perfil/update', updatePerfil)
 
 module.exports = routerUse
