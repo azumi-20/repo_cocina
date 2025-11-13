@@ -12,35 +12,33 @@ const BASE_URL = 'https://api.spoonacular.com/recipes'
 //funciones: buscandoReceta
 // Esta función hace una petición a la API de Spoonacular para
 // obtener recetas basadas en los ingredientes que el usuario ingrese.
+const buscandoReceta = async (ingredientes) => {
+  try {
+    // Traducir cada ingrediente al inglés
+    const ingredientesEn = await Promise.all(
+      ingredientes.map(i => translate(i, { to: 'en' }))
+    );
+    const ingredientesClean = ingredientesEn.map(i => i.toLowerCase().trim());
 
-const buscandoReceta = async(ingredientes)=>{
-    try {
-        // Construimos la URL completa para hacer la búsqueda avanzada de recetas.
-        const url = `${BASE_URL}/complexSearch`
+    const url = `${BASE_URL}/complexSearch`;
+    const params = {
+      apiKey: SPOONACULAR_KEY,
+      query: ingredientesClean.join(' '),   // búsqueda por palabra clave
+      includeIngredients: ingredientesClean.join(','), // opcional
+      number: 10,
+      addRecipeNutrition: true
+    };
 
-        // Definimos los parámetros que enviaremos a la API
-        // apiKey → nuestra clave de acceso
-        // includeIngredients → los ingredientes que el usuario ingresa, separados por comas
-        // number → cantidad máxima de resultados que queremos obtener
-        const parametros = {
-            apiKey: SPOONACULAR_KEY,
-            includeIngredients: ingredientes.join(','),//separar con las ,
-            number: 10, //traer 10 resultados
-            addRecipeNutrition: true// incluye calorías
-        }
+    console.log("Buscando recetas con:", params);
 
-        // Hacemos una petición GET a la API usando axios
-        // El segundo argumento { params: parametros } convierte el objeto en una query string
-        // Ejemplo final: https://api.spoonacular.com/recipes/complexSearch?apiKey=...&includeIngredients=tomato,onion&number=10
-        const response = await axios.get(url, {params: parametros})
+    const response = await axios.get(url, { params });
+    return response.data;
+  } catch (error) {
+    console.error('Error al buscar receta:', error.message);
+    throw new Error('Error al buscar recetas');
+  }
+};
 
-         // Hacemos una petición GET a la API usando axios // El segundo argumento { params: parametros } convierte el objeto en una query string // Ejemplo final: https://api.spoonacular.com/recipes/complexSearch?apiKey=...&includeIngredients=tomato,onion&number=10 const response = await axios.get(url, {params: parametros}) // Retornamos los datos que nos devuelve la API (response.data contiene los resultados) return response.data
-        return response.data
-    } catch (error) {
-        console.error('Error al buscar receta:', error.message)
-        throw new Error('Error al buscar recetas')
-    }
-}
 
 const buscandoRecetaXId = async(id) => {
     // Construimos la URL de la petición usando la constante BASE_URL y el id recibido.
