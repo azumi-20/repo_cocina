@@ -18,6 +18,7 @@ routerUse.post('/general', updateGeneral)
 routerUse.post('/nivel', updateNivel)
 routerUse.post('/genero', updateSexo)
 routerUse.post('/caloria', updateCaloria)
+
 routerUse.post('/olvidar', recuperarContra)
 routerUse.post('/establecer', nuevaContra)
 // Ruta para obtener perfil
